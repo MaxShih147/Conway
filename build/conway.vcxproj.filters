@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\kwshi\source\repos\conway\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\kwshi\source\repos\conway\imgui\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\kwshi\source\repos\conway\imgui\imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\kwshi\source\repos\conway\imgui\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\kwshi\source\repos\conway\imgui\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\kwshi\source\repos\conway\imgui\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\kwshi\source\repos\conway\imgui\backends\imgui_impl_glfw.cpp">
+      <Filter>imgui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\kwshi\source\repos\conway\imgui\backends\imgui_impl_opengl3.cpp">
+      <Filter>imgui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Conway.cpp">
+      <Filter>conway</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\kwshi\source\repos\conway\imgui\backends\imgui_impl_glfw.h">
+      <Filter>imgui\backends</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\kwshi\source\repos\conway\imgui\backends\imgui_impl_opengl3.h">
+      <Filter>imgui\backends</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\kwshi\source\repos\conway\imgui\backends\imgui_impl_opengl3_loader.h">
+      <Filter>imgui\backends</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\kwshi\source\repos\conway\imgui\imconfig.h">
+      <Filter>imgui\header</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\kwshi\source\repos\conway\imgui\imgui_internal.h">
+      <Filter>imgui\header</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\kwshi\source\repos\conway\imgui\imstb_truetype.h">
+      <Filter>imgui\header</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\kwshi\source\repos\conway\imgui\imstb_textedit.h">
+      <Filter>imgui\header</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\kwshi\source\repos\conway\imgui\imstb_rectpack.h">
+      <Filter>imgui\header</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\kwshi\source\repos\conway\imgui\imgui.h">
+      <Filter>imgui\header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Conway.h">
+      <Filter>conway</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\kwshi\source\repos\conway\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{ED563707-F5DD-39F1-B1BE-71665150D5F5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{08224278-52F9-3F5E-BB01-5555FF897F43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{3b5c080f-c547-4af7-b7cf-bfc25046dc75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui\backends">
+      <UniqueIdentifier>{07615e49-01f9-44f2-a8da-29ae315f5772}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui\header">
+      <UniqueIdentifier>{27470be0-f024-4748-9bf4-a7e3b5bed6b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="conway">
+      <UniqueIdentifier>{87a949b1-031f-4882-93f7-c2dd312c7405}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
