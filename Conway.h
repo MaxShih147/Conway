@@ -1,29 +1,31 @@
 #pragma once
 
 #include <vector>
+#include <string>
 #include <memory>
 
 typedef std::pair<int, int> Position;
 
-enum class CellState
-{
-	cs_dead = 0,
-	cs_living = 1
-};
+//enum class CellState
+//{
+//	cs_dead = 0,
+//	cs_living = 1
+//};
 
 class Cell
 {
 public:
 	Cell(Position __pos);
 public:
-	void UpdateState();
+	void Update();
+	int GetAge();
 	int GetIndex();
-	CellState GetState();
+	//CellState GetState();
 public:
 	Position _pos;
 private:
 	int _age;
-	CellState _state;
+	//CellState _state;
 };
 
 class Conway
@@ -41,7 +43,8 @@ public:
 public:
 	// ! Field Section
 	//void SetSize(int __width = 100, int __height = 100);
-	void UpdateOccupancy(std::shared_ptr<Cell> _cel, Position _pos);
+	void Create(std::shared_ptr<Cell> _cell);
+	void Kill(std::shared_ptr<Cell>& _cell);
 
 public:
 	// ! Utility Section
@@ -67,4 +70,15 @@ private:
 private:
 	int _width;
 	int _height;
+};
+
+// ! For test...
+class ConwayPattern
+{
+public:
+	ConwayPattern(std::string __name, int __period, std::vector<Position> __pattern);
+public:
+	std::string _name;
+	int _period;
+	std::vector<Position> _pattern;
 };

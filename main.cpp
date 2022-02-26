@@ -1,6 +1,8 @@
-﻿#include <algorithm>
+﻿// ! Reference: https://conwaylife.com/wiki/
+
+#include <algorithm>
 #include <iostream>
- #include <codecvt>
+#include <codecvt>
 #include <string>
 #include <random>
 #include <memory>
@@ -288,10 +290,10 @@ void ShowConwayWindow()
     {
         for (auto j = 0; j < fieldSize.y; ++j)
         {
-            int x = canvas_p0.x + i * gridStep + spacing;
-            int y = canvas_p0.y + j * gridStep + spacing;
+            int x = 10 + canvas_p0.x + i * gridStep + spacing;
+            int y = 10 + canvas_p0.y + j * gridStep + spacing;
 
-            if (_field[i][j] != nullptr && _field[i][j]->GetState() == CellState::cs_living)
+            if (_field[i][j] != nullptr)
             {
                 draw_list->AddRectFilled(
                     ImVec2(x + 1, y + 1),
@@ -309,6 +311,7 @@ void ShowConwayWindow()
     if (g_frame_count >= 40)
     {
         g_conway->Update();
+        g_frame_count = 0;
     }
 }
 
@@ -385,7 +388,7 @@ int WinMain()
 
     // Our state
     bool show_max_dev_windows = true;
-    bool show_demo_window = true;
+    bool show_demo_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     //ImGuiIO& io = ImGui::GetIO();
@@ -397,14 +400,8 @@ int WinMain()
     // ! Algorithm Section
     g_conway = std::make_shared<Conway>();
 
-    std::vector<Position> pattern
-    {
-        {10, 10},
-        {11, 10},
-        {10, 11},
-        {11, 11}
-    };
-    g_conway->Start(pattern);
+    extern ConwayPattern octagon_2;
+    g_conway->Start(octagon_2._pattern);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -432,7 +429,7 @@ int WinMain()
 
             ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(backgroundColor)); // Set window background to red
             ImGui::Begin(
-                "Start Today's Puzzle", 
+                "Conway", 
                 &show_max_dev_windows, 
                 g_main_window_flags
             );
