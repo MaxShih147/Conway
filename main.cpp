@@ -1,6 +1,4 @@
-﻿// ! Reference: https://conwaylife.com/wiki/
-
-#include <algorithm>
+﻿#include <algorithm>
 #include <iostream>
 #include <codecvt>
 #include <string>
@@ -179,9 +177,12 @@ void ShowThemeEditorWindow()
     //backgroundColor.Value = color;
 }
 
+
+static ImVector<ImVec2> points;
+static bool g_start_evolution = false;
+
 void ShowConwayWindow()
 {
-    static ImVector<ImVec2> points;
     static ImVec2 scrolling(0.0f, 0.0f);
     static bool opt_enable_grid = true;
     static bool opt_enable_context_menu = false;
@@ -206,7 +207,7 @@ void ShowConwayWindow()
 
     // Using InvisibleButton() as a convenience 1) it will advance the layout cursor and 2) allows us to use IsItemHovered()/IsItemActive()
     ImVec2 canvas_p0 = ImGui::GetCursorScreenPos();      // ImDrawList API uses screen coordinates!
-    //ImVec2 canvas_sz = ImGui::GetContentRegionAvail();   // Resize canvas to what's available
+    ImVec2 window_sz = ImGui::GetContentRegionAvail();   // Resize canvas to what's available
     ImVec2 fieldSize(g_conway->GetWidth(), g_conway->GetHeight());
     ImVec2 canvas_sz(fieldSize.x * gridStep, fieldSize.y * gridStep);
     ImVec2 canvas_p1 = ImVec2(canvas_p0.x + canvas_sz.x, canvas_p0.y + canvas_sz.y);
@@ -218,25 +219,24 @@ void ShowConwayWindow()
     draw_list->AddRect(canvas_p0, canvas_p1, IM_COL32(255, 255, 255, 255));
 
     // This will catch our interactions
-    //ImGui::InvisibleButton("canvas", canvas_sz, ImGuiButtonFlags_MouseButtonLeft | ImGuiButtonFlags_MouseButtonRight);
-    //const bool is_hovered = ImGui::IsItemHovered(); // Hovered
+    ImGui::InvisibleButton("canvas", canvas_sz, ImGuiButtonFlags_MouseButtonLeft | ImGuiButtonFlags_MouseButtonRight);
+    const bool is_hovered = ImGui::IsItemHovered(); // Hovered
     const bool is_active = ImGui::IsItemActive();   // Held
     const ImVec2 origin(canvas_p0.x + scrolling.x, canvas_p0.y + scrolling.y); // Lock scrolled origin
-    const ImVec2 mouse_pos_in_canvas(io.MousePos.x - origin.x, io.MousePos.y - origin.y);
+    const ImVec2 mousePosInCanvas(io.MousePos.x - origin.x, io.MousePos.y - origin.y);
 
     // Add first and second point
- /*   if (is_hovered && !adding_line && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+    if (is_hovered /*&& !adding_line*/ && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
     {
-        points.push_back(mouse_pos_in_canvas);
-        points.push_back(mouse_pos_in_canvas);
-        adding_line = true;
+        points.push_back(mousePosInCanvas);
+        //adding_line = true;
     }
-    if (adding_line)
-    {
-        points.back() = mouse_pos_in_canvas;
-        if (!ImGui::IsMouseDown(ImGuiMouseButton_Left))
-            adding_line = false;
-    }*/
+    //if (adding_line)
+    //{
+    //    points.back() = mouse_pos_in_canvas;
+    //    if (!ImGui::IsMouseDown(ImGuiMouseButton_Left))
+    //        adding_line = false;
+    //}
 
     // Pan (we use a zero mouse threshold when there's no context menu)
     // You may decide to make that threshold dynamic based on whether the mouse is hovering something etc.
@@ -270,48 +270,87 @@ void ShowConwayWindow()
         for (float y = fmodf(scrolling.y, gridStep); y < canvas_sz.y; y += gridStep)
             draw_list->AddLine(ImVec2(canvas_p0.x, canvas_p0.y + y), ImVec2(canvas_p1.x, canvas_p0.y + y), IM_COL32(200, 200, 200, 40));
     }
-    //for (int n = 0; n < points.Size; n += 2)
-    //    draw_list->AddLine(ImVec2(origin.x + points[n].x, origin.y + points[n].y), ImVec2(origin.x + points[n + 1].x, origin.y + points[n + 1].y), IM_COL32(255, 255, 0, 255), 2.0f);
-    //draw_list->PopClipRect();
-
 
     static ImVec4 colf = ImVec4(1.0f, 1.0f, 0.4f, 1.0f);
     ImGui::ColorEdit4("Color", &colf.x);
     const ImU32 col = ImColor(colf);
-    int spacing = 2;
 
+    int spacing = 2;
+    int shiftX = window_sz.x / 2;
+    int shiftY = window_sz.y / 2;
     int sz = gridStep - 2 * spacing;
     const float rounding = sz / 5.0f;
     static float thickness = 0.0f;
-    //const ImDrawFlags corners_tl_br = ImDrawFlags_RoundCornersTopLeft | ImDrawFlags_RoundCornersBottomRight;
 
-    auto _field = g_conway->GetField();
-    for (auto i = 0; i < fieldSize.x; ++i)
+    if (!g_start_evolution)
     {
-        for (auto j = 0; j < fieldSize.y; ++j)
+        for (auto i = 0; i < points.size(); ++i)
         {
-            int x = 10 + canvas_p0.x + i * gridStep + spacing;
-            int y = 10 + canvas_p0.y + j * gridStep + spacing;
+            int x = canvas_p0.x + int((points[i].x - canvas_p0.x) / gridStep + 0.5) * gridStep + spacing;
+            int y = canvas_p0.y + int((points[i].y - canvas_p0.y) / gridStep + 0.5) * gridStep + spacing;
 
-            if (_field[i][j] != nullptr)
-            {
-                draw_list->AddRectFilled(
-                    ImVec2(x + 1, y + 1),
-                    ImVec2(x + sz, y + sz),
-                    col,
-                    rounding,
-                    ImDrawFlags_None/*,
-                    thickness*/
-                );
-            }
+            draw_list->AddRectFilled(
+                ImVec2(x + 1, y + 1),
+                ImVec2(x + sz, y + sz),
+                col,
+                rounding,
+                ImDrawFlags_None/*,
+                thickness*/
+            );
         }
     }
 
-    ++g_frame_count;
-    if (g_frame_count >= 40)
+    //for (int n = 0; n < points.Size; n += 2)
+    //    draw_list->AddLine(ImVec2(origin.x + points[n].x, origin.y + points[n].y), ImVec2(origin.x + points[n + 1].x, origin.y + points[n + 1].y), IM_COL32(255, 255, 0, 255), 2.0f);
+    //draw_list->PopClipRect();
+
+    if (ImGui::Button("Start"))
     {
-        g_conway->Update();
-        g_frame_count = 0;
+        g_start_evolution = true;
+
+        std::vector<Position> userPattern;
+        for (auto i = 0; i < points.size(); ++i)
+        {
+            int x = int((points[i].x - canvas_p0.x) / gridStep + 0.5);
+            int y = int((points[i].y - canvas_p0.y) / gridStep + 0.5);
+            userPattern.push_back(Position(x, y));
+        }
+
+        g_conway->Start(userPattern);
+    }
+
+    if (g_start_evolution)
+    {
+        //const ImDrawFlags corners_tl_br = ImDrawFlags_RoundCornersTopLeft | ImDrawFlags_RoundCornersBottomRight;
+
+        auto _field = g_conway->GetField();
+        for (auto i = 0; i < fieldSize.x; ++i)
+        {
+            for (auto j = 0; j < fieldSize.y; ++j)
+            {
+                int x = /*shiftX + */canvas_p0.x + i * gridStep + spacing;
+                int y = /*shiftY + */canvas_p0.y + j * gridStep + spacing;
+
+                if (_field[i][j] != nullptr)
+                {
+                    draw_list->AddRectFilled(
+                        ImVec2(x + 1, y + 1),
+                        ImVec2(x + sz, y + sz),
+                        col,
+                        rounding,
+                        ImDrawFlags_None/*,
+                        thickness*/
+                    );
+                }
+            }
+        }
+
+        ++g_frame_count;
+        if (g_frame_count >= 40)
+        {
+            g_conway->Update();
+            g_frame_count = 0;
+        }
     }
 }
 
@@ -400,8 +439,8 @@ int WinMain()
     // ! Algorithm Section
     g_conway = std::make_shared<Conway>();
 
-    extern ConwayPattern octagon_2;
-    g_conway->Start(octagon_2._pattern);
+    //extern ConwayPattern octagon_2;
+    //g_conway->Start(octagon_2._pattern);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
